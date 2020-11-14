@@ -5,33 +5,35 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\MutationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass=MutationRepository::class)
+ * @ApiFilter(DateFilter::class, properties={"date"})
  */
 class Mutation
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      *
      */
     private $id;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="date", nullable=true, nullable=true)
      */
     private $date;
 
     /**
-     * @ORM\Column(type="string", length=62)
+     * @ORM\Column(type="string", length=62, nullable=true)
      */
     private $type;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", nullable=true)
      */
     private $value;
 
@@ -41,12 +43,12 @@ class Mutation
     private $dispositionNumber;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="string", length=62 ,nullable=true)
      */
     private $departmentCode;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", nullable=true)
      */
     private $realSurface;
 

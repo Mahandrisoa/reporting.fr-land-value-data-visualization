@@ -16,3 +16,9 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
                 alias: App
+        dql:
+            string_functions:
+                EXTRACT: DoctrineExtensions\Query\Postgresql\ExtractFunction
+                YEAR: DoctrineExtensions\Query\Postgresql\Year
+
+    

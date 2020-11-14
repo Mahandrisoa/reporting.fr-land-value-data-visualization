@@ -6,12 +6,6 @@ use App\Entity\Mutation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @method Mutation|null find($id, $lockMode = null, $lockVersion = null)
- * @method Mutation|null findOneBy(array $criteria, array $orderBy = null)
- * @method Mutation[]    findAll()
- * @method Mutation[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
 class MutationRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -19,32 +13,54 @@ class MutationRepository extends ServiceEntityRepository
         parent::__construct($registry, Mutation::class);
     }
 
-    // /**
-    //  * @return Mutation[] Returns an array of Mutation objects
-    //  */
     /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('m.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
+     * average price of sales per year
     */
+    public function averageSalesPerYear() {
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQueryBuilder()
+                              ->select('(AVG(m.value/ NULLIF(m.realSurface,0))) average, YEAR(m.date) year')
+                              ->from('App:mutation', 'm')
+                              ->groupBy('year')
+                              ->getQuery();
+
+        return $query->execute();
+    }
 
     /*
-    public function findOneBySomeField($value): ?Mutation
-    {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
+    -- number of sales per day, week, month, year 6s
+    -- if it is done in the backend it will take a large amount of time
+    -- this is why it is more convinient to just return the number of sales per day
+    -- so then, filtering i.e: per day, per week, per month or per year will be more easy to handle
     */
+    public function salesFilter ($startDate, $endDate) {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQueryBuilder()
+                               ->select('COUNT(m.value) nb_ventes, m.date date_vente')
+                               ->from('App:mutation', 'm')
+                               ->where('m.date BETWEEN :start_date AND :end_date')
+                               ->groupBy('date_vente')
+                               ->orderBy('date_vente', 'ASC')
+                               ->setParameter('start_date', $startDate)
+                               ->setParameter('end_date', $endDate)
+                               ->getQuery();
+
+        return $query->execute();
+    }
+
+    /*
+     * Number of sales per departement 7s
+    */
+    public function salesPerDepartment () {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQueryBuilder()
+                               ->select('COUNT(m.value) value, m.departmentCode department_code')
+                               ->from('App:mutation', 'm')
+                               ->groupBy('department_code')
+                               ->getQuery();
+
+        return $query->execute();
+    }
 }
