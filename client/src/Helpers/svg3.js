@@ -57,7 +57,7 @@ class Svg3 extends Component {
       .attr("alignment-baseline", "middle")
       .attr("transform", d => `translate(${this.createArc.centroid(d)})`)
       .style("font-size", 10)
-      .text(d =>"d");
+      .text(d => d.value/this.props.total*100 > 1 ? this.format(d.value/this.props.total*100) +"% "+ d.data.region : "");
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -93,7 +93,7 @@ class Svg3 extends Component {
       .attr("transform", d => `translate(${this.createArc.centroid(d)})`)
       .style("fill", "white")
       .style("font-size", 14)
-      .text(d => this.format(d.value/100) +" %" +"----> "+ d.data.department_code);
+      .text(d => this.format(d.value/this.props.total*100) +"% "+ d.data.region);
   }
   render() {
     return <svg ref={this.ref} />;

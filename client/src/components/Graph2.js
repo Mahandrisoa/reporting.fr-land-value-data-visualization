@@ -9,9 +9,8 @@ class Graph2 extends Component {
   constructor(props){
     super(props);
     this.state = {mois: 'month', dateDebut: '2019-01-01',dateFin: '2020-12-01',data: []};
-
-
   }
+  
   componentWillMount(){
     console.log('Je suis appelé en premier!');
   }
@@ -30,17 +29,11 @@ class Graph2 extends Component {
       this.setState({data: data });
       })
       .catch(error => console.log("error"));
-    }
+  }
 
-
- 
   componentDidMount(){
       this.getData()
   }
-
-  componentWillUnmount() {
-    clearInterval(this.timerID);
-    }
 
   handleChangeDateDebut(event) {
     this.setState({ dateDebut: event.target.value});
