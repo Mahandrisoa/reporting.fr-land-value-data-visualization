@@ -63,4 +63,18 @@ class MutationRepository extends ServiceEntityRepository
 
         return $query->execute();
     }
+
+     public function salesPerDepartmentByYear ($year) {
+            $entityManager = $this->getEntityManager();
+
+            $query = $entityManager->createQueryBuilder()
+                                   ->select('COUNT(m.value) value, m.departmentCode department_code')
+                                   ->from('App:mutation', 'm')
+                                   ->where('YEAR(m.date) = :year')
+                                   ->groupBy('department_code')
+                                   ->setParameter('year', $year)
+                                   ->getQuery();
+
+            return $query->execute();
+        }
 }
