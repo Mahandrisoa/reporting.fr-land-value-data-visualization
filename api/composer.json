@@ -37,6 +37,7 @@
     "require-dev": {
         "api-platform/schema-generator": "^2.2",
         "doctrine/doctrine-fixtures-bundle": "^3.3",
+        "justinrainbow/json-schema": "^5.2",
         "symfony/css-selector": "^5.1",
         "symfony/debug-bundle": "^5.1",
         "symfony/maker-bundle": "^1.21",
