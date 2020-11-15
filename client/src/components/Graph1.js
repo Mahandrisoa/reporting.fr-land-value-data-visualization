@@ -38,12 +38,8 @@ class Graph1 extends Component {
 
  
   render() {
-
-  	const data =  this.state.data
-
-    
 		return  ( 
-         <Svg data={data}>
+         <Svg data={this.state.data}>
 			
          </Svg>
          )
