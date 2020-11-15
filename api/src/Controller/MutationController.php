@@ -50,10 +50,15 @@ class MutationController extends AbstractController
      */
     public function salesPerDepartmentAction(Request $request): Response
     {
-        $startDate = $request->query->get('startDate');
-        $endDate = $request->query->get('endDate');
-        $data = $this->mutationRepository->salesPerDepartment($startDate, $endDate);
+        $year = $request->query->get('year');
+        if(empty($year)) {
+            $data = $this->mutationRepository->salesPerDepartment();
 
+            $response = new Response(json_encode($data));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+        }
+        $data = $this->mutationRepository->salesPerDepartmentByYear($year);
         $response = new Response(json_encode($data));
         $response->headers->set('Content-Type', 'application/json');
 
