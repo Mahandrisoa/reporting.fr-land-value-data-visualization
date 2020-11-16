@@ -39,11 +39,17 @@ class Graph1 extends Component {
  
   render() {
 		return  ( 
-        <div>
-          {this.state.data.length > 0 && (
+        <div className="container-fluid">
+          {this.state.data.length > 0 ? (
             <Svg data={this.state.data}>
             </Svg>
-          )}
+          ) : 
+          (<center>
+            <br/><br/><br/><br/>
+            <div class="spinner-border text-info" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </center>)}
         </div>
          )
   }

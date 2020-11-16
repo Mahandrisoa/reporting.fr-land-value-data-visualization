@@ -79,7 +79,7 @@ class Graph2 extends Component {
 
   render() {
     return (
-      <div>
+      <div className="container-fluid">
         <h3>Filtre  :</h3>
         <select onChange={this.handleChangeDateDebutMois.bind(this)} class="custom-select" name="">
           <option value="day">Jour</option>
@@ -99,7 +99,7 @@ class Graph2 extends Component {
           onChange={this.handleChangeDateFin.bind(this)}
           min="2015-01-01" max="2020-12-31" value={this.state.dateFin} />
 
-        {this.state.data.length > 0 && (
+        {this.state.data.length > 0 ? (
         <Svg2
           data={this.state.data}
           width={1200}
@@ -109,7 +109,13 @@ class Graph2 extends Component {
           left={100}
           right={30}
         />
-        )}
+        ): (<center>
+              <br/><br/><br/><br/>
+              <div class="spinner-border text-info" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </center>)
+        }
       </div>
 
     );

@@ -8,7 +8,7 @@ import Graph3 from "./components/Graph3";
 
 const Welcome = () => (
     <div>
-      <h1>Valeurs foncières</h1>
+      <h1 className="container-fluid">Valeurs foncières</h1>
       <Tabs>
         <div label="Prix moyen au m²">
           <Graph1></Graph1>

@@ -62,7 +62,7 @@ class  Graph3 extends React.Component {
   render() {
     return (
 
-    <div>
+    <div className="container-fluid">
         <center  >
             <select onChange={this.handleChange.bind(this)} class="custom-select" name="">
                       <option >2015</option>
@@ -76,7 +76,7 @@ class  Graph3 extends React.Component {
 
 
             <br/><br/><br/><br/>
-            {this.state.data.length > 0 && this.state.total !== 0 && (
+            {this.state.data.length > 0 && this.state.total !== 0 ? (
               <Svg3
                 data={this.state.data}
                 width={800}
@@ -85,7 +85,13 @@ class  Graph3 extends React.Component {
                 outerRadius={400}
                 total={this.state.total}
               />
-            )}
+            ) : 
+            (<center>
+              <br/><br/><br/><br/>
+              <div class="spinner-border text-info" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </center>)}
             </center>
           </div>
             
