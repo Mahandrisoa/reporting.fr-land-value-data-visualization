@@ -38,14 +38,19 @@ class Graph1 extends Component {
 
  
   render() {
-
-  	const data =  this.state.data
-
-    
 		return  ( 
-         <Svg data={data}>
-			
-         </Svg>
+        <div className="container-fluid">
+          {this.state.data.length > 0 ? (
+            <Svg data={this.state.data}>
+            </Svg>
+          ) : 
+          (<center>
+            <br/><br/><br/><br/>
+            <div class="spinner-border text-info" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </center>)}
+        </div>
          )
   }
 }

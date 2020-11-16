@@ -1,111 +1,107 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3'
 import Svg2 from "../Helpers/svg2";
- 
-
+import _ from 'lodash'
 
 class Graph2 extends Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state = {mois: 'month', dateDebut: '2019-01-01',dateFin: '2020-12-01',data: []};
-
-
+    this.state = { tri: 'day', dateDebut: '2019-01-01', dateFin: '2020-12-01', data: [] };
   }
-  componentWillMount(){
+
+  componentWillMount() {
     console.log('Je suis appelé en premier!');
   }
 
-  getData(){
+  getData() {
     fetch(`https://${document.domain}:8443/salesFilter?startDate=${this.state.dateDebut}&endDate=${this.state.dateFin}`)
       .then(response => {
-      if (response.ok) {
-        const data = response.json()
-        return data;
-      } else {
-        throw new Error('Something went wrong ...');
-      }
+        if (response.ok) {
+          const data = response.json()
+          return data;
+        } else {
+          throw new Error('Something went wrong ...');
+        }
       })
       .then(data => {
-      this.setState({data: data });
+        var arr = [];
+        data.map(function (thisList) {
+          arr.push({
+            value: thisList.nb_ventes | 0,
+            date: new Date(thisList.date_vente.date).toLocaleDateString('fr-FR', { day: 'numeric', year: 'numeric', month: 'long' })
+          });
+        })
+        if(this.state.tri === "month") {
+          var groupedByMoisData = _.chain(arr)
+          .groupBy(function(item) {
+            return item.date.split(" ")[1] + " " + item.date.split(" ")[2]; 
+          })
+          .map((value, key) => ({ date: key, value: value.reduce((total, current) => total + current.value, 0) }))
+          .value()
+          this.setState({ data: groupedByMoisData });
+        } else if(this.state.tri === "year") {
+          var groupedByYearData = _.chain(arr)
+          .groupBy(function(item) {
+            return item.date.split(" ")[2]; 
+          })
+          .map((value, key) => ({ date: key, value: value.reduce((total, current) => total + current.value, 0) }))
+          .value()
+          this.setState({ data: groupedByYearData });
+        } else {
+          this.setState({ data: arr });
+        }
       })
-      .catch(error => console.log("error"));
-    }
-
-
- 
-  componentDidMount(){
-      this.getData()
+      .catch(error => console.log(error));
   }
 
-  componentWillUnmount() {
-    clearInterval(this.timerID);
+  componentDidMount() {
+    this.getData()
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if(prevState.dateDebut !== this.state.dateDebut || prevState.dateFin !== this.state.dateFin || prevState.tri !== this.state.tri) {
+      this.getData()
     }
+  }
 
   handleChangeDateDebut(event) {
-    this.setState({ dateDebut: event.target.value});
-    this.getData();
+    this.setState({ dateDebut: event.target.value });
   };
+
   handleChangeDateFin(event) {
-    this.setState({dateFin: event.target.value});
-    this.getData();
-  };
-    handleChangeDateDebutMois(event) {
-    this.setState({mois: event.target.value});
-    this.getData();
+    this.setState({ dateFin: event.target.value });
   };
 
-render() {
+  handleChangeDateDebutMois(event) {
+    this.setState({ tri: event.target.value });
+  };
 
-  function parseData(data) {
-      var arr = [];
-      data.map(function (thisList){
-        arr.push({
-          nb_ventes: thisList.nb_ventes | 0,
-            date_vente : thisList.date_vente
-        });
-      })
-      return arr;
-    }
-
-    const c  =parseData(this.state.data)
-
-      const generateData = () =>
-       c.map((item, index) => ({
-        index: index,
-        date: new Date(item.date_vente.date).toLocaleDateString('fr-FR', {day: 'numeric', year: 'numeric', month: 'long' }),
-        value: item.nb_ventes
-      }));
-       
-      const data = generateData();
-      console.log(data)
-
-
-
-  return (
-    <div>
-
-                <h3>Filtrer par  : <b class=" text-primary">{this.state.mois}</b></h3>
-        <h3>La date du debut est : <b class=" text-primary">{this.state.dateDebut}</b></h3>
-        <h3>L'annee de fin : <b class=" text-primary">{this.state.dateFin}</b></h3>
-      
+  render() {
+    return (
+      <div className="container-fluid">
+        <h3>Filtre  :</h3>
         <select onChange={this.handleChangeDateDebutMois.bind(this)} class="custom-select" name="">
-                  <option >day</option>
-                  <option >month</option>
-                  <option >year</option>
-              
-               </select>
-         <br/><br/>
-         <input type="date" class="form-control" placeholder="Saisir la date de debut "
-          onChange={this.handleChangeDateDebut.bind(this)}
-            min="2015-01-01" max="2020-12-31"/><br/>
-       
-          <input type="date" class="form-control" placeholder="Saisir la date de fin "
-           onChange={this.handleChangeDateFin.bind(this)}
-            min="2015-01-01" max="2020-12-31"/>
+          <option value="day">Jour</option>
+          <option value="month">Mois</option>
+          <option value="year">Année</option>
 
-      <Svg2
-          data={data}
+        </select>
+        <br /><br />
+
+        <h3>Date début : </h3>
+        <input type="date" class="form-control" placeholder="Saisir la date de debut "
+          onChange={this.handleChangeDateDebut.bind(this)}
+          min="2015-01-01" max="2020-12-31" value={this.state.dateDebut}/><br />
+
+        <h3>Date fin : </h3>
+        <input type="date" class="form-control" placeholder="Saisir la date de fin "
+          onChange={this.handleChangeDateFin.bind(this)}
+          min="2015-01-01" max="2020-12-31" value={this.state.dateFin} />
+
+        {this.state.data.length > 0 ? (
+        <Svg2
+          data={this.state.data}
           width={1200}
           height={800}
           top={20}
@@ -113,15 +109,17 @@ render() {
           left={100}
           right={30}
         />
+        ): (<center>
+              <br/><br/><br/><br/>
+              <div class="spinner-border text-info" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </center>)
+        }
+      </div>
 
-
-         </div>
-          
     );
-}
+  }
 }
 
-   
- 
-     
 export default Graph2;
