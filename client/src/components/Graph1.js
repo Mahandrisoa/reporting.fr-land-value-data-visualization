@@ -39,9 +39,12 @@ class Graph1 extends Component {
  
   render() {
 		return  ( 
-         <Svg data={this.state.data}>
-			
-         </Svg>
+        <div>
+          {this.state.data.length > 0 && (
+            <Svg data={this.state.data}>
+            </Svg>
+          )}
+        </div>
          )
   }
 }

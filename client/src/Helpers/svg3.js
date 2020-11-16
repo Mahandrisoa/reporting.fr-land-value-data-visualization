@@ -91,9 +91,9 @@ class Svg3 extends Component {
       .attr("text-anchor", "middle")
       .attr("alignment-baseline", "middle")
       .attr("transform", d => `translate(${this.createArc.centroid(d)})`)
-      .style("fill", "white")
+      .style("fill", "black")
       .style("font-size", 14)
-      .text(d => this.format(d.value/this.props.total*100) +"% "+ d.data.region);
+      .text(d => d.value/this.props.total*100 > 1 ? this.format(d.value/this.props.total*100) +"% "+ d.data.region : "");
   }
   render() {
     return <svg ref={this.ref} />;

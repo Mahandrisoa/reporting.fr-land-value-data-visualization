@@ -64,7 +64,6 @@ class  Graph3 extends React.Component {
 
     <div>
         <center  >
-            <h3>L'annee selectioné est : <b class=" text-primary">{this.state.annee}</b></h3>
             <select onChange={this.handleChange.bind(this)} class="custom-select" name="">
                       <option >2015</option>
                       <option >2016</option>
