@@ -2,6 +2,7 @@
 
 body {
     margin: 0;
+    background-color: #f0f0f0;
 }
 
 /***** GLOBAL *****/
@@ -312,7 +313,8 @@ a.other__button {
     }
 }
 
-.tab-list {  border-bottom: 1px solid #ccc;
+.tab-list {  
+    border-bottom: 1px solid #ccc;
   padding-left: 0;
 }
 
@@ -321,10 +323,28 @@ a.other__button {
   list-style: none;
   margin-bottom: -1px;
   padding: 0.5rem 0.75rem;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
 }
 
 .tab-list-active {
-  background-color: white;
+  background-color:#cecece;
   border: solid #ccc;
   border-width: 1px 1px 0 1px;
+}
+
+.titre {
+    padding: 0.5rem 0.75rem;
+    z-index: 100;
+    color: white;
+}
+
+header {
+    content: "";
+    background-color: #288690;
+    height: 70px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .12), 0 1px 2px rgba(0, 0, 0, .24);
 }
