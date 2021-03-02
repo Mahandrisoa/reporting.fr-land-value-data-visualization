@@ -7,8 +7,12 @@ import Graph2 from "./components/Graph2";
 import Graph3 from "./components/Graph3";
 
 const Welcome = () => (
+    <>
+    <header>
+    <h1 className="titre">Valeurs foncières</h1>
+    </header>
+    <br/><br/><br/>
     <div>
-      <h1 className="container-fluid">Valeurs foncières</h1>
       <Tabs>
         <div label="Prix moyen au m²">
           <Graph1></Graph1>
@@ -21,6 +25,7 @@ const Welcome = () => (
         </div>
       </Tabs>
     </div>
+    </>
   );
 
 
